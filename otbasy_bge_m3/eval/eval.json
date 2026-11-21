@@ -1,0 +1,434 @@
+{
+  "answer_id_scheme": "Validation IDs answer:<label> mirror the notebook's sorted answer labels. Control IDs are matched by the notebook's relevant_rows rules in evaluate.py.",
+  "queries": [
+    {
+      "case_id": "test-01",
+      "query": "У меня четверть в единственной квартире. Может ли такая доля помешать постановке на жилищный учёт?",
+      "acceptable_ids": ["control:01"],
+      "proposed_acceptable_ids": ["review:share-below-50"],
+      "needs_review": true,
+      "review_note": "В выдаче были примеры с долями 40% и 45%; ответ о пороге ниже 50% может быть применим, но требует проверки.",
+      "in_scope": true
+    },
+    {
+      "case_id": "test-02",
+      "query": "У меня половина в единственной квартире. Будет ли это основанием для отказа в постановке на жилищный учёт?",
+      "acceptable_ids": ["control:02"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-03",
+      "query": "Продал квартиру в другом регионе два года назад. Учитывается ли она, если сейчас хочу встать на жилищный учёт?",
+      "acceptable_ids": ["control:03"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-04",
+      "query": "Живу в Алматы и зарегистрирован там всего второй год. Хватит ли этого для постановки на жилищный учёт, если я не сирота?",
+      "acceptable_ids": ["control:04"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-05",
+      "query": "Сколько рабочих дней у банка на решение по заявлению о постановке в жилищную очередь?",
+      "acceptable_ids": ["control:05"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-06",
+      "query": "В проверке данных для жилищной очереди мне отказали. Откуда скачать документ с объяснением?",
+      "acceptable_ids": ["control:06"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-07",
+      "query": "Уехал в другой населённый пункт на постоянное жительство. Могут ли меня исключить из списка нуждающихся?",
+      "acceptable_ids": ["control:07"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-08",
+      "query": "После смерти мужа сохранится ли за мной очередность, если мы стояли на учёте вместе и я всё ещё нуждаюсь в жилье?",
+      "acceptable_ids": ["control:08"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-09",
+      "query": "Положена ли семье ещё одна отдельная комната при предоставлении жилья, если у ребёнка инвалидность?",
+      "acceptable_ids": ["control:09"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-10",
+      "query": "Мой единственный дом официально признан аварийным. Кто решает, предоставить ли нам коммунальную квартиру?",
+      "acceptable_ids": ["control:10"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-11",
+      "query": "Кто утверждает сумму жилищного сертификата и перечень тех, кто может его получить?",
+      "acceptable_ids": ["control:11"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-12",
+      "query": "Какая минимальная доля жилья при распределении предусмотрена для сирот и детей без попечения родителей?",
+      "acceptable_ids": ["control:12"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-13",
+      "query": "При расчёте дохода для жилищной господдержки посчитают ли алименты на ребёнка как заработок?",
+      "acceptable_ids": ["control:13"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-14",
+      "query": "С какой периодичностью банк публикует списки состоящих на жилищном учёте?",
+      "acceptable_ids": ["control:14"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-15",
+      "query": "Надо ли оформлять государственную регистрацию письменного договора найма квартиры из государственного фонда?",
+      "acceptable_ids": ["control:15"],
+      "in_scope": true
+    },
+    {
+      "case_id": "test-16",
+      "query": "Заработок оказался выше допустимого в одном отборе. Означает ли это снятие с жилищного учёта?",
+      "acceptable_ids": ["control:16"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-01a",
+      "query": "Я отправила данные для проверки очередников. В каком разделе кабинета можно увидеть решение по заявке?",
+      "acceptable_ids": ["answer:1"],
+      "proposed_acceptable_ids": ["review:inventory-result"],
+      "needs_review": true,
+      "review_note": "В выдаче указаны раздел «Инвентаризация» и статус заявки; проверьте, считать ли это достаточным ответом.",
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-01b",
+      "query": "Где на портале посмотреть, закончилась ли проверка сведений обо мне как об очереднике?",
+      "acceptable_ids": ["answer:1"],
+      "proposed_acceptable_ids": ["review:inventory-result"],
+      "needs_review": true,
+      "review_note": "В выдаче указаны раздел «Инвентаризация» и статус заявки; проверьте, считать ли это достаточным ответом.",
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-13a",
+      "query": "Мне уже выдали государственную квартиру в пользование. Примут ли ещё раз заявление на жилищный учёт?",
+      "acceptable_ids": ["answer:13"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-13b",
+      "query": "Можно ли снова встать в очередь, пока пользуюсь квартирой из жилфонда государства?",
+      "acceptable_ids": ["answer:13"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-14a",
+      "query": "В документах для жилищной очереди указали неверные данные. Может ли банк из-за этого отклонить заявление?",
+      "acceptable_ids": ["answer:14"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-14b",
+      "query": "В анкете для постановки на учёт обнаружили недостоверную информацию. Это основание для отказа?",
+      "acceptable_ids": ["answer:14"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-19a",
+      "query": "Стою на жилищном учёте в Казахстане, но получила ВНЖ за границей. Могу ли лишиться очереди?",
+      "acceptable_ids": ["answer:19"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-19b",
+      "query": "Оформил право на постоянное проживание за рубежом. Что будет с моим учётом на жильё в Казахстане?",
+      "acceptable_ids": ["answer:19"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-20a",
+      "query": "Из списка нуждающихся меня исключили. Обязаны ли прислать письменное объяснение и когда?",
+      "acceptable_ids": ["answer:20"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-20b",
+      "query": "Через сколько сообщат причину исключения из жилищной очереди, и будет ли это изложено письменно?",
+      "acceptable_ids": ["answer:20"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-21a",
+      "query": "Я на двадцать пятой неделе беременности. Учитывается ли это при определении площади жилья для семьи?",
+      "acceptable_ids": ["answer:21"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-21b",
+      "query": "Беременность на сроке 24 недели. Будет ли это учитываться, когда определяют размер предоставляемой квартиры?",
+      "acceptable_ids": ["answer:21"],
+      "proposed_acceptable_ids": ["review:pregnancy-above-22"],
+      "needs_review": true,
+      "review_note": "В выдаче ответ для 24 недель прямо говорит, что срок превышает порог в 22 недели.",
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-27a",
+      "query": "У меня вторая группа инвалидности и я стою в очереди. Относится ли мой случай к общей квоте в половину жилья?",
+      "acceptable_ids": ["answer:27"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-27b",
+      "query": "Мы многодетная семья на учёте. Входим ли мы в группу получателей, которым совокупно выделяют как минимум половину жилья?",
+      "acceptable_ids": ["answer:27"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-29a",
+      "query": "Если жильё предоставляют по льготной ипотечной мере, где искать правила расчёта площади на семью?",
+      "acceptable_ids": ["answer:29"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-29b",
+      "query": "Каким документом определяют норму площади для жилья в рамках мер из подпункта 3 пункта 1 статьи 10-8?",
+      "acceptable_ids": ["answer:29"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-31a",
+      "query": "Квартиру у частного собственника снял акимат, а заселяют меня. С кем я должен подписать договор?",
+      "acceptable_ids": ["answer:31"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-31b",
+      "query": "Кто будет второй стороной письменного поднайма, если акимат нанял квартиру на частном рынке?",
+      "acceptable_ids": ["answer:31"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-50a",
+      "query": "Ребёнку с инвалидностью исполнилось 18. Потеряет ли семья жилищную очередь из-за одного только возраста?",
+      "acceptable_ids": ["answer:50"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-50b",
+      "query": "Подросток с инвалидностью достиг совершеннолетия. Может ли это само по себе снять нас с учёта нуждающихся?",
+      "acceptable_ids": ["answer:50"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-56a",
+      "query": "При распределении господдержки важен только год, когда я попала в очередь, или учитывают ещё заработок?",
+      "acceptable_ids": ["answer:56"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-56b",
+      "query": "Я очень давно в очереди. Влияют ли доходы на порядок предоставления жилищной поддержки?",
+      "acceptable_ids": ["answer:56"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-63a",
+      "query": "Заявитель я, но муж работает. Учитывают ли его зарплату при оценке дохода для господдержки?",
+      "acceptable_ids": ["answer:63"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-63b",
+      "query": "При расчёте дохода для жилищной помощи банк посмотрит заработок жены, если документы подал я?",
+      "acceptable_ids": ["answer:63"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-86a",
+      "query": "У меня беременность ровно двадцать одна неделя. Достаточно ли такого срока, чтобы учли её при расчёте площади?",
+      "acceptable_ids": ["answer:86"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-86b",
+      "query": "Учитывают ли беременность при подборе размера жилья, если сейчас прошло ровно 22 недели?",
+      "acceptable_ids": ["answer:86"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-96a",
+      "query": "Сообщение с результатом распределения не пришло. В каком кабинете можно проверить, предварительно дали ли мне квартиру?",
+      "acceptable_ids": ["answer:96"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-96b",
+      "query": "Если телефон молчит после отбора на жильё, можно ли увидеть предварительное распределение на площадке банка?",
+      "acceptable_ids": ["answer:96"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-105a",
+      "query": "При заселении из государственного фонда допустимо ли поселить брата и сестру в одну комнату?",
+      "acceptable_ids": ["answer:105"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-105b",
+      "query": "Могут ли дать сыну и дочери общую спальню при распределении, если закон учитывает пол жильцов?",
+      "acceptable_ids": ["answer:105"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-109a",
+      "query": "Суд отменил усыновление, ребёнок вернулся в учреждение. Какая дата будет стоять у него в жилищной очереди?",
+      "acceptable_ids": ["answer:109"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-109b",
+      "query": "Ребёнок снова в интернате после отмены усыновления. В очередь восстановят со старой или с новой датой?",
+      "acceptable_ids": ["answer:109"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-113a",
+      "query": "На какой площадке узнаю, когда в моём регионе откроют заявки на квартиры с кредитом?",
+      "acceptable_ids": ["answer:113"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-113b",
+      "query": "Где следить за объявлениями о старте приёма на кредитное жильё Отбасы банка?",
+      "acceptable_ids": ["answer:113"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-116a",
+      "query": "Сколько времени даётся попечителю на постановку ребёнка на жилищный учёт после передачи под попечительство?",
+      "acceptable_ids": ["answer:116"],
+      "in_scope": true
+    },
+    {
+      "case_id": "validation-116b",
+      "query": "Ребёнка-сироту приняли в организацию образования. Какой срок у представителя для подачи на жилищный учёт?",
+      "acceptable_ids": ["answer:116"],
+      "in_scope": true
+    },
+    {
+      "case_id": "near-scope-01",
+      "query": "Какая сейчас процентная ставка по жилищному депозиту в Отбасы банке?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-02",
+      "query": "Какой минимальный первоначальный взнос нужен для ипотечного займа?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-03",
+      "query": "Можно ли досрочно погасить ипотеку и взимается ли комиссия?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-04",
+      "query": "Как перевести жилищный депозит на имя родственника?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-05",
+      "query": "Как начисляется государственная премия на депозит в текущем году?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-06",
+      "query": "Как восстановить доступ к мобильному приложению банка?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-07",
+      "query": "Как изменить номер телефона в личном кабинете банка?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-08",
+      "query": "Можно ли оформить автокредит в Отбасы банке?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-09",
+      "query": "Какие документы нужны для рефинансирования ипотечного займа?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-10",
+      "query": "Как узнать остаток долга по ипотеке?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-11",
+      "query": "Можно ли купить квартиру на вторичном рынке по ипотечной программе?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-12",
+      "query": "Как получить выписку по счёту жилищного депозита?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-13",
+      "query": "Какова средняя стоимость аренды квартиры в Астане сейчас?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-14",
+      "query": "Как подать заявку на кредит для ремонта жилья?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    },
+    {
+      "case_id": "near-scope-15",
+      "query": "Предоставляет ли банк кредит на строительство частного дома?",
+      "acceptable_ids": [],
+      "needs_review": true,
+      "in_scope": false
+    }
+  ]
+}

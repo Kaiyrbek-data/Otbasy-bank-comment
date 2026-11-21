@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f7">
+  <title>Ассистент по жилищной очереди</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --teal: #008b8a;
+      --orange: #f2812e;
+      --peach: #fdbe88;
+      --aqua: #63d1c8;
+      --page: #f7fbfa;
+      --surface: #fff;
+      --surface-muted: #f1f8f7;
+      --text: #263938;
+      --muted: #6b7b7a;
+      --line: #dce9e7;
+      --accent: var(--teal);
+      --accent-soft: #e4f4f3;
+      --danger: var(--orange);
+      --danger-soft: #fff2e9;
+      --shadow: 0 1px 2px #17212b0a;
+      font: 15px/1.5 Ubuntu, Helios, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --page: #142020;
+        --surface: #1c2a29;
+        --surface-muted: #243432;
+        --text: #e9f4f3;
+        --muted: #a8bebb;
+        --line: #39514e;
+        --accent: var(--aqua);
+        --accent-soft: #203c39;
+        --danger: var(--peach);
+        --danger-soft: #422f26;
+        --shadow: 0 1px 2px #0003;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background: var(--page);
+    }
+
+    button, textarea, select { font: inherit; }
+    button { color: inherit; }
+
+    .column {
+      width: min(100% - 28px, 470px);
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .profile, .composer, .post {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 18px;
+    }
+
+    .brand-mark {
+      display: grid;
+      flex: 0 0 48px;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--teal);
+      font-size: 26px;
+      font-weight: 750;
+      line-height: 1;
+    }
+
+    .avatar {
+      display: grid;
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--accent);
+      background: var(--accent-soft);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .profile-copy { min-width: 0; flex: 1; }
+    .brand-name { margin-bottom: 2px; color: var(--accent); font-size: 13px; font-weight: 750; letter-spacing: -.15px; }
+    .brand-name::after { display: inline-block; width: 6px; height: 6px; margin-left: 4px; border-radius: 50%; background: var(--orange); content: ""; vertical-align: 1px; }
+    .profile h1 { margin: 0; font-size: 16px; line-height: 1.3; font-weight: 700; }
+    .profile p { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 20px 2px 8px;
+    }
+
+    .section-title { margin: 0; font-size: 14px; font-weight: 700; }
+
+    .health {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .health::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--muted);
+      content: "";
+    }
+
+    .health.ready::before { background: var(--teal); }
+    .health.unavailable::before { background: var(--orange); }
+
+    .topics {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: 0 -2px 18px;
+      padding: 3px 2px 7px;
+      scrollbar-width: thin;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .chip:hover, .chip:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .composer { padding: 15px; }
+    .composer-row { display: flex; align-items: flex-start; gap: 11px; }
+    .composer-body { min-width: 0; flex: 1; }
+
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 76px;
+      max-height: 220px;
+      padding: 9px 0;
+      resize: vertical;
+      border: 0;
+      outline: 0;
+      color: var(--text);
+      background: transparent;
+      line-height: 1.5;
+    }
+
+    textarea::placeholder { color: var(--muted); }
+    .composer-controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+    .composer-hint { color: var(--muted); font-size: 11px; }
+
+    .select-k {
+      min-height: 36px;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      background: var(--surface);
+      font-size: 12px;
+    }
+
+    .send, .action, .saved-toggle {
+      display: inline-flex;
+      min-height: 36px;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+
+    .send {
+      border-color: var(--accent);
+      color: var(--surface);
+      background: var(--accent);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .send { color: #142020; }
+    }
+
+    .send:disabled { opacity: .65; cursor: wait; }
+    .saved-toggle { min-height: 30px; padding: 4px 9px; color: var(--muted); font-size: 12px; }
+    .saved-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+
+    .notice {
+      min-height: 22px;
+      margin: 9px 3px 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .notice.error { color: var(--danger); }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--line);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .75s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+    .feed { display: grid; gap: 12px; }
+
+    .post { padding: 15px; }
+    .comment { display: flex; align-items: flex-start; gap: 10px; }
+    .comment .avatar { width: 34px; height: 34px; flex-basis: 34px; font-size: 12px; }
+    .comment-content { min-width: 0; flex: 1; }
+    .comment-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; min-height: 22px; }
+    .comment-name { font-size: 13px; font-weight: 700; }
+    .comment-time { color: var(--muted); font-size: 11px; }
+    .comment-text { margin: 3px 0 0; overflow-wrap: anywhere; line-height: 1.55; }
+
+    .assistant-reply {
+      margin: 13px 0 0 44px;
+      padding-left: 13px;
+      border-left: 2px solid var(--line);
+    }
+
+    .assistant-reply .avatar {
+      width: 29px;
+      height: 29px;
+      flex-basis: 29px;
+      font-size: 11px;
+    }
+
+    .answer { margin: 4px 0 0; overflow-wrap: anywhere; line-height: 1.6; }
+
+    details.sources, details.similar {
+      margin-top: 11px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--surface-muted);
+    }
+
+    details > summary {
+      padding: 8px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .source-body { display: grid; gap: 5px; padding: 0 10px 10px; font-size: 12px; }
+    .source-line { display: flex; gap: 6px; overflow-wrap: anywhere; }
+    .source-label { flex: 0 0 auto; color: var(--muted); }
+
+    .post-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 12px 0 0 44px;
+    }
+
+    .action { min-height: 32px; padding: 5px 9px; color: var(--muted); font-size: 12px; }
+    .action svg { width: 15px; height: 15px; }
+    .action[aria-pressed="true"].helpful { border-color: var(--orange); color: var(--danger); background: var(--danger-soft); }
+    .action[aria-pressed="true"].review { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+    .similar-list { display: grid; gap: 8px; padding: 0 10px 10px; }
+    .similar-item { padding-top: 8px; border-top: 1px solid var(--line); }
+    .similar-question { margin: 0; font-size: 12px; font-weight: 650; }
+    .similar-answer { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+
+    .empty {
+      padding: 25px 16px;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      color: var(--muted);
+      background: var(--surface);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 520px) {
+      .column { width: min(100% - 20px, 470px); padding: 12px 0 32px; }
+      .profile { padding: 14px; }
+      .profile h1 { font-size: 15px; }
+      .post { padding: 13px; }
+      .assistant-reply, .post-actions { margin-left: 33px; }
+      .assistant-reply { padding-left: 10px; }
+      .composer-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="column">
+    <header class="profile">
+      <div class="brand-mark" aria-hidden="true">O</div>
+      <div class="profile-copy">
+        <div class="brand-name">OtbasAI</div>
+        <h1>Ассистент по жилищной очереди</h1>
+        <p>Отвечаю по материалам базы знаний. Не заменяет консультацию специалиста</p>
+      </div>
+    </header>
+
+    <section aria-labelledby="topicsTitle">
+      <div class="toolbar">
+        <h2 class="section-title" id="topicsTitle">Темы</h2>
+        <span class="health" id="health" role="status">Проверяю сервис…</span>
+      </div>
+      <div class="topics" id="topics" aria-label="Темы базы знаний">
+        <span class="composer-hint">Загружаю темы…</span>
+      </div>
+    </section>
+
+    <form class="composer" id="form" novalidate>
+      <div class="composer-row">
+        <div class="avatar" aria-hidden="true">Вы</div>
+        <div class="composer-body">
+          <textarea id="question" rows="2" aria-label="Ваш вопрос" placeholder="Добавьте вопрос…"></textarea>
+          <div class="composer-controls">
+            <span class="composer-hint">Enter — отправить · Shift+Enter — новая строка</span>
+            <div style="display:flex;align-items:center;gap:7px">
+              <select class="select-k" id="topK" aria-label="Количество вариантов">
+                <option value="1">1 ответ</option>
+                <option value="3" selected>3 ответа</option>
+                <option value="5">5 ответов</option>
+                <option value="10">10 ответов</option>
+              </select>
+              <button class="send" id="send" type="submit">Отправить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="toolbar">
+      <h2 class="section-title" id="feedTitle">Лента</h2>
+      <button class="saved-toggle" id="savedToggle" type="button" aria-pressed="false">Сохранённые ответы</button>
+    </div>
+    <div class="notice" id="notice" role="status" aria-live="polite"></div>
+    <section class="feed" id="feed" aria-label="Лента вопросов и ответов">
+      <div class="empty" id="empty">Задайте вопрос — ответ и найденные материалы появятся здесь.</div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.querySelector('#form');
+    const input = document.querySelector('#question');
+    const sendButton = document.querySelector('#send');
+    const topK = document.querySelector('#topK');
+    const topicsNode = document.querySelector('#topics');
+    const feed = document.querySelector('#feed');
+    const notice = document.querySelector('#notice');
+    const healthNode = document.querySelector('#health');
+    const savedToggle = document.querySelector('#savedToggle');
+    const feedTitle = document.querySelector('#feedTitle');
+    const entries = [];
+    let showingSaved = false;
+    let entrySequence = 0;
+
+    const sampleQuestions = {
+      'Доход': 'Какие доходы учитываются при постановке на жилищную очередь?',
+      'Собственность': 'Как наличие жилья в собственности влияет на жилищную очередь?',
+      'Регистрация': 'Какие требования к регистрации для постановки на жилищную очередь?',
+      'Доля в жилье': 'Учитывается ли доля в жилье при постановке на очередь?',
+      'Площадь и комнаты': 'Как площадь жилья влияет на жилищную очередь?',
+      'Распределение жилья': 'Как происходит распределение жилья между очередниками?',
+      'Жилищный сертификат': 'Кто может получить жилищный сертификат?',
+      'Инвентаризация': 'Как пройти инвентаризацию и проверить статус заявки?',
+      'Субсидия на аренду': 'Кто может получить субсидию на аренду жилья?'
+    };
+
+    function setNotice(message = '', isError = false) {
+      notice.textContent = message;
+      notice.classList.toggle('error', isError);
+    }
+
+    function readStorage(key, fallback) {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function writeStorage(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+      } catch {
+        setNotice('Не удалось сохранить состояние в этом браузере.', true);
+        return false;
+      }
+    }
+
+    function node(tag, className, text) {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      if (text !== undefined) element.textContent = text;
+      return element;
+    }
+
+    function avatar(text, className = 'avatar') {
+      return node('div', className, text);
+    }
+
+    function addField(parent, label, value) {
+      const line = node('div', 'source-line');
+      line.append(node('span', 'source-label', `${label}:`), node('span', '', value || 'Не указано'));
+      parent.append(line);
+    }
+
+    function makeSources(match) {
+      const details = node('details', 'sources');
+      details.append(node('summary', '', 'Источники'));
+      const body = node('div', 'source-body');
+      addField(body, 'Источник', match.source);
+      addField(body, 'Ссылка или указание', match.reference);
+      addField(body, 'Тема', match.topic);
+      details.append(body);
+      return details;
+    }
+
+    function feedbackKey(entry, match, rank) {
+      return `${entry.id}:${match.id ?? rank}`;
+    }
+
+    function makeAction(label, className, pressed, iconPath) {
+      const button = node('button', `action ${className}`);
+      button.type = 'button';
+      button.setAttribute('aria-pressed', String(pressed));
+      const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('viewBox', '0 0 24 24');
+      icon.setAttribute('fill', 'none');
+      icon.setAttribute('stroke', 'currentColor');
+      icon.setAttribute('stroke-width', '1.8');
+      icon.setAttribute('stroke-linecap', 'round');
+      icon.setAttribute('stroke-linejoin', 'round');
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', iconPath);
+      icon.append(path);
+      button.append(icon, document.createTextNode(label));
+      return button;
+    }
+
+    function renderPost(entry) {
+      const post = node('article', 'post');
+      const userComment = node('div', 'comment');
+      userComment.append(avatar('Вы'));
+      const userContent = node('div', 'comment-content');
+      const userHead = node('div', 'comment-head');
+      userHead.append(node('span', 'comment-name', 'Вы'), node('time', 'comment-time', entry.time));
+      userContent.append(userHead, node('p', 'comment-text', entry.question));
+      userComment.append(userContent);
+      post.append(userComment);
+
+      const primary = entry.matches[0];
+      if (primary) {
+        const reply = node('div', 'assistant-reply');
+        const assistantComment = node('div', 'comment');
+        assistantComment.append(avatar('А'));
+        const assistantContent = node('div', 'comment-content');
+        const assistantHead = node('div', 'comment-head');
+        assistantHead.append(node('span', 'comment-name', 'Ассистент'));
+        assistantContent.append(assistantHead, node('p', 'answer', primary.answer || 'В базе не найден текст ответа.'));
+        assistantComment.append(assistantContent);
+        reply.append(assistantComment, makeSources(primary));
+        post.append(reply);
+
+        const feedback = readStorage('otbasai-feedback', {});
+        const state = feedback[feedbackKey(entry, primary, 1)] || {};
+        const actions = node('div', 'post-actions');
+        const helpful = makeAction('Полезно', 'helpful', Boolean(state.helpful), 'M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6l1.2 1.2L12 21l7.6-7.6 1.2-1.2a5.4 5.4 0 0 0 0-7.6Z');
+        const review = makeAction('Нужна проверка', 'review', Boolean(state.review), 'M12 9v4m0 4h.01M10.3 3.9 1.8 18.5A1.7 1.7 0 0 0 3.2 21h17.6a1.7 1.7 0 0 0 1.4-2.5L13.7 3.9a2 2 0 0 0-3.4 0Z');
+        helpful.addEventListener('click', () => saveFeedback(entry, primary, 1, 'helpful'));
+        review.addEventListener('click', () => saveFeedback(entry, primary, 1, 'review'));
+        actions.append(helpful, review);
+
+        const savedAnswers = readStorage('otbasai-saved', []);
+        const isSaved = Array.isArray(savedAnswers) && savedAnswers.some((item) => item.answer === primary.answer);
+        const saveButton = node('button', 'action', isSaved ? 'Сохранено' : 'Сохранить ответ');
+        saveButton.type = 'button';
+        saveButton.setAttribute('aria-pressed', String(isSaved));
+        saveButton.addEventListener('click', () => toggleSaved(primary));
+        actions.append(saveButton);
+        post.append(actions);
+
+        const similar = entry.matches.slice(1);
+        if (similar.length) {
+          const details = node('details', 'similar');
+          details.append(node('summary', '', `Похожие вопросы (${similar.length})`));
+          const list = node('div', 'similar-list');
+          similar.forEach((match) => {
+            const item = node('div', 'similar-item');
+            item.append(node('p', 'similar-question', match.question || 'Вопрос не указан'));
+            if (match.answer) item.append(node('p', 'similar-answer', match.answer));
+            item.append(makeSources(match));
+            list.append(item);
+          });
+          details.append(list);
+          post.append(details);
+        }
+      } else {
+        post.append(node('div', 'assistant-reply', 'По этому запросу не найдено ответов.'));
+      }
+      return post;
+    }
+
+    function saveFeedback(entry, match, rank, selected) {
+      const all = readStorage('otbasai-feedback', {});
+      const key = feedbackKey(entry, match, rank);
+      const current = all[key] || {};
+      all[key] = current[selected] ? {} : { helpful: selected === 'helpful', review: selected === 'review' };
+      if (writeStorage('otbasai-feedback', all)) {
+        renderFeed();
+        setNotice(selected === 'helpful' ? 'Спасибо за отзыв.' : 'Отметка сохранена.');
+      }
+    }
+
+    function toggleSaved(match) {
+      const all = readStorage('otbasai-saved', []);
+      if (!Array.isArray(all)) {
+        setNotice('Сохранённые ответы в браузере повреждены.', true);
+        return;
+      }
+      const index = all.findIndex((item) => item.answer === match.answer);
+      if (index >= 0) all.splice(index, 1);
+      else all.unshift(match);
+      if (writeStorage('otbasai-saved', all)) {
+        renderFeed();
+        setNotice(index >= 0 ? 'Ответ удалён из сохранённых.' : 'Ответ сохранён.');
+      }
+    }
+
+    function renderFeed() {
+      feed.replaceChildren();
+      const savedAnswers = readStorage('otbasai-saved', []);
+      if (showingSaved) {
+        const list = Array.isArray(savedAnswers) ? savedAnswers : [];
+        feedTitle.textContent = 'Сохранённые ответы';
+        if (!list.length) {
+          feed.append(node('div', 'empty', 'Сохранённых ответов пока нет.'));
+          return;
+        }
+        list.forEach((match, index) => {
+          const entry = {
+            id: `saved-${index}`,
+            time: 'Сохранённый ответ',
+            question: match.question || 'Вопрос не указан',
+            matches: [match]
+          };
+          feed.append(renderPost(entry));
+        });
+        return;
+      }
+
+      feedTitle.textContent = 'Лента';
+      if (!entries.length) {
+        feed.append(node('div', 'empty', 'Задайте вопрос — ответ и найденные материалы появятся здесь.'));
+        return;
+      }
+      [...entries].reverse().forEach((entry) => feed.append(renderPost(entry)));
+    }
+
+    async function loadTopics() {
+      try {
+        const response = await fetch('/topics');
+        if (!response.ok) throw new Error('topics');
+        const topics = await response.json();
+        topicsNode.replaceChildren();
+        topics.forEach((topic) => {
+          const chip = node('button', 'chip', topic.name);
+          chip.type = 'button';
+          chip.title = `Пример вопроса: ${sampleQuestions[topic.name] || `Что важно знать о теме «${topic.name}»?`}`;
+          chip.addEventListener('click', () => {
+            input.value = sampleQuestions[topic.name] || `Что важно знать о теме «${topic.name}»?`;
+            input.focus();
+          });
+          topicsNode.append(chip);
+        });
+        if (!topics.length) topicsNode.append(node('span', 'composer-hint', 'Темы не найдены.'));
+      } catch {
+        topicsNode.replaceChildren(node('span', 'composer-hint', 'Не удалось загрузить темы.'));
+      }
+    }
+
+    async function checkHealth() {
+      try {
+        const response = await fetch('/health');
+        if (!response.ok) throw new Error('health');
+        const data = await response.json();
+        const ready = data.status === 'ready';
+        healthNode.textContent = ready ? 'Сервис готов' : 'Сервис недоступен';
+        healthNode.classList.toggle('ready', ready);
+        healthNode.classList.toggle('unavailable', !ready);
+      } catch {
+        healthNode.textContent = 'Сервис недоступен';
+        healthNode.classList.add('unavailable');
+      }
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const question = input.value.trim();
+      if (!question) {
+        setNotice('Введите вопрос.', true);
+        input.focus();
+        return;
+      }
+      if (Array.from(question).length > 4000) {
+        setNotice('Вопрос слишком длинный. Максимум — 4000 символов.', true);
+        input.focus();
+        return;
+      }
+
+      sendButton.disabled = true;
+      sendButton.replaceChildren();
+      const spinner = node('span', 'spinner');
+      spinner.setAttribute('aria-hidden', 'true');
+      sendButton.append(spinner, document.createTextNode('Ищу…'));
+      setNotice('Ищу подходящие материалы…');
+
+      try {
+        const response = await fetch('/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question, top_k: Number(topK.value) })
+        });
+        if (!response.ok) {
+          let detail = '';
+          try {
+            const error = await response.json();
+            detail = typeof error.detail === 'string' ? error.detail : '';
+          } catch {}
+          if (response.status === 422) {
+            setNotice(detail || 'Проверьте текст вопроса и попробуйте ещё раз.', true);
+          } else {
+            setNotice('Не удалось выполнить поиск. Попробуйте ещё раз позже.', true);
+          }
+          return;
+        }
+        const data = await response.json();
+        if (!Array.isArray(data.matches)) throw new Error('invalid-response');
+        if (!data.matches.length) {
+          setNotice('Подходящие материалы не найдены. Попробуйте переформулировать вопрос.');
+          return;
+        }
+        showingSaved = false;
+        savedToggle.setAttribute('aria-pressed', 'false');
+        const now = new Date();
+        entries.push({
+          id: `${now.getTime()}-${++entrySequence}`,
+          question,
+          time: now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+          matches: data.matches
+        });
+        input.value = '';
+        renderFeed();
+        setNotice('');
+      } catch {
+        setNotice('Сервер недоступен. Проверьте запуск приложения и повторите попытку.', true);
+      } finally {
+        sendButton.disabled = false;
+        sendButton.textContent = 'Отправить';
+      }
+    });
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
+    savedToggle.addEventListener('click', () => {
+      showingSaved = !showingSaved;
+      savedToggle.setAttribute('aria-pressed', String(showingSaved));
+      renderFeed();
+      setNotice('');
+    });
+
+    loadTopics();
+    checkHealth();
+    renderFeed();
+  </script>
+</body>
+</html>

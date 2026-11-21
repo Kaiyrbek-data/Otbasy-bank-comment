@@ -1,0 +1,12 @@
+services:
+  otbasai:
+    build: .
+    platform: linux/amd64
+    ports:
+      - "8000:8000"
+    volumes:
+      - hf-cache:/models
+    restart: unless-stopped
+
+volumes:
+  hf-cache:

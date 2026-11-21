@@ -1,0 +1,13 @@
+{
+  "model": "BAAI/bge-m3",
+  "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+  "pooling": "CLS (конфигурация SentenceTransformer)",
+  "mode": "dense, CPU, FBGEMM INT8",
+  "max_tokens": 96,
+  "dimension": 1024,
+  "rank": 64,
+  "epochs": 3,
+  "learning_rate": 0.001,
+  "rows": 10000,
+  "law_edition": "2026-09-14"
+}

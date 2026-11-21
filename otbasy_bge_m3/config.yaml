@@ -1,0 +1,21 @@
+model:
+  name: BAAI/bge-m3
+  revision: 5617a9f61b028005a4858fdac845db406aefb181
+
+projection:
+  dimension: 1024
+  rank: 64
+
+retrieval:
+  top_k: 3
+  dedupe: true
+
+confidence:
+  low_threshold: 0.45
+  high_threshold: 0.60
+
+index_version: assets-10k-v1
+app_version: 1.1.0
+
+logging:
+  jsonl_path: logs/queries.jsonl
