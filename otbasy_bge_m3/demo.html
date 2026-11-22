@@ -3,43 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f6f7">
+  <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#171a1f" media="(prefers-color-scheme: dark)">
   <title>Ассистент по жилищной очереди</title>
   <style>
     :root {
       color-scheme: light;
-      --teal: #008b8a;
-      --orange: #f2812e;
-      --peach: #fdbe88;
-      --aqua: #63d1c8;
-      --page: #f7fbfa;
+      --page: #f4f5f7;
       --surface: #fff;
-      --surface-muted: #f1f8f7;
-      --text: #263938;
-      --muted: #6b7b7a;
-      --line: #dce9e7;
-      --accent: var(--teal);
-      --accent-soft: #e4f4f3;
-      --danger: var(--orange);
-      --danger-soft: #fff2e9;
-      --shadow: 0 1px 2px #17212b0a;
-      font: 15px/1.5 Ubuntu, Helios, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --surface-muted: #f8f9fa;
+      --text: #252a31;
+      --muted: #69727e;
+      --line: #e0e4e8;
+      --accent: #465365;
+      --accent-soft: #eef1f5;
+      --danger: #a63d37;
+      --danger-soft: #fff0ef;
+      --warning: #805900;
+      --warning-soft: #fff6d8;
+      font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         color-scheme: dark;
-        --page: #142020;
-        --surface: #1c2a29;
-        --surface-muted: #243432;
-        --text: #e9f4f3;
-        --muted: #a8bebb;
-        --line: #39514e;
-        --accent: var(--aqua);
-        --accent-soft: #203c39;
-        --danger: var(--peach);
-        --danger-soft: #422f26;
-        --shadow: 0 1px 2px #0003;
+        --page: #171a1f;
+        --surface: #20242b;
+        --surface-muted: #252a32;
+        --text: #edf0f3;
+        --muted: #a3acb7;
+        --line: #343b45;
+        --accent: #c5cfdb;
+        --accent-soft: #2a313b;
+        --danger: #f1aaa5;
+        --danger-soft: #3b2929;
+        --warning: #f1d27b;
+        --warning-soft: #3b3424;
       }
     }
 
@@ -66,7 +65,6 @@
       border: 1px solid var(--line);
       border-radius: 14px;
       background: var(--surface);
-      box-shadow: var(--shadow);
     }
 
     .profile {
@@ -74,20 +72,6 @@
       align-items: center;
       gap: 13px;
       padding: 18px;
-    }
-
-    .brand-mark {
-      display: grid;
-      flex: 0 0 48px;
-      width: 48px;
-      height: 48px;
-      place-items: center;
-      border-radius: 12px;
-      color: #fff;
-      background: var(--teal);
-      font-size: 26px;
-      font-weight: 750;
-      line-height: 1;
     }
 
     .avatar {
@@ -104,9 +88,14 @@
       font-weight: 700;
     }
 
+    .profile-avatar {
+      width: 48px;
+      height: 48px;
+      flex-basis: 48px;
+      font-size: 16px;
+    }
+
     .profile-copy { min-width: 0; flex: 1; }
-    .brand-name { margin-bottom: 2px; color: var(--accent); font-size: 13px; font-weight: 750; letter-spacing: -.15px; }
-    .brand-name::after { display: inline-block; width: 6px; height: 6px; margin-left: 4px; border-radius: 50%; background: var(--orange); content: ""; vertical-align: 1px; }
     .profile h1 { margin: 0; font-size: 16px; line-height: 1.3; font-weight: 700; }
     .profile p { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
 
@@ -137,8 +126,8 @@
       content: "";
     }
 
-    .health.ready::before { background: var(--teal); }
-    .health.unavailable::before { background: var(--orange); }
+    .health.ready::before { background: #36825b; }
+    .health.unavailable::before { background: var(--danger); }
 
     .topics {
       display: flex;
@@ -214,14 +203,14 @@
 
     .send {
       border-color: var(--accent);
-      color: var(--surface);
+      color: #fff;
       background: var(--accent);
       font-size: 13px;
       font-weight: 650;
     }
 
     @media (prefers-color-scheme: dark) {
-      .send { color: #142020; }
+      .send { color: #171a1f; }
     }
 
     .send:disabled { opacity: .65; cursor: wait; }
@@ -236,6 +225,23 @@
     }
 
     .notice.error { color: var(--danger); }
+
+    .confidence-note {
+      margin: 8px 0 0;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--warning);
+      background: var(--warning-soft);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .not-found {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
 
     .loading {
       display: inline-flex;
@@ -280,6 +286,8 @@
     }
 
     .answer { margin: 4px 0 0; overflow-wrap: anywhere; line-height: 1.6; }
+    .matched-question { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+    .matched-question strong { color: var(--text); font-weight: 600; }
 
     details.sources, details.similar {
       margin-top: 11px;
@@ -327,6 +335,11 @@
       font-size: 13px;
     }
 
+    button:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
     @media (max-width: 520px) {
       .column { width: min(100% - 20px, 470px); padding: 12px 0 32px; }
       .profile { padding: 14px; }
@@ -335,15 +348,16 @@
       .assistant-reply, .post-actions { margin-left: 33px; }
       .assistant-reply { padding-left: 10px; }
       .composer-hint { display: none; }
+      .composer-controls { justify-content: flex-end; }
+      .composer-controls > div { flex-wrap: wrap; justify-content: flex-end; }
     }
   </style>
 </head>
 <body>
   <main class="column">
     <header class="profile">
-      <div class="brand-mark" aria-hidden="true">O</div>
+      <div class="avatar profile-avatar" aria-hidden="true">А</div>
       <div class="profile-copy">
-        <div class="brand-name">OtbasAI</div>
         <h1>Ассистент по жилищной очереди</h1>
         <p>Отвечаю по материалам базы знаний. Не заменяет консультацию специалиста</p>
       </div>
@@ -502,6 +516,23 @@
       userComment.append(userContent);
       post.append(userComment);
 
+      if (entry.found === false) {
+        const reply = node('div', 'assistant-reply');
+        const assistantComment = node('div', 'comment');
+        assistantComment.append(avatar('А'));
+        const assistantContent = node('div', 'comment-content');
+        const assistantHead = node('div', 'comment-head');
+        assistantHead.append(node('span', 'comment-name', 'Ассистент'));
+        assistantContent.append(
+          assistantHead,
+          node('p', 'not-found', 'Не нашёл подходящего ответа. Обратитесь к администратору.')
+        );
+        assistantComment.append(assistantContent);
+        reply.append(assistantComment);
+        post.append(reply);
+        return post;
+      }
+
       const primary = entry.matches[0];
       if (primary) {
         const reply = node('div', 'assistant-reply');
@@ -510,7 +541,21 @@
         const assistantContent = node('div', 'comment-content');
         const assistantHead = node('div', 'comment-head');
         assistantHead.append(node('span', 'comment-name', 'Ассистент'));
-        assistantContent.append(assistantHead, node('p', 'answer', primary.answer || 'В базе не найден текст ответа.'));
+        assistantContent.append(assistantHead);
+        if (entry.confidence === 'medium') {
+          assistantContent.append(
+            node('p', 'confidence-note', 'Возможно, это не совсем ваш случай, проверьте условия')
+          );
+        }
+        assistantContent.append(
+          node('p', 'answer', primary.answer || 'В базе не найден текст ответа.')
+        );
+        const matchedQuestion = node('p', 'matched-question');
+        matchedQuestion.append(
+          node('strong', '', 'Найдено по вопросу: '),
+          document.createTextNode(primary.question || 'Вопрос не указан')
+        );
+        assistantContent.append(matchedQuestion);
         assistantComment.append(assistantContent);
         reply.append(assistantComment, makeSources(primary));
         post.append(reply);
@@ -536,11 +581,11 @@
         const similar = entry.matches.slice(1);
         if (similar.length) {
           const details = node('details', 'similar');
-          details.append(node('summary', '', `Похожие вопросы (${similar.length})`));
+          details.append(node('summary', '', `Похожие ответы (${similar.length})`));
           const list = node('div', 'similar-list');
           similar.forEach((match) => {
             const item = node('div', 'similar-item');
-            item.append(node('p', 'similar-question', match.question || 'Вопрос не указан'));
+            item.append(node('p', 'similar-question', `Найдено по вопросу: ${match.question || 'Вопрос не указан'}`));
             if (match.answer) item.append(node('p', 'similar-answer', match.answer));
             item.append(makeSources(match));
             list.append(item);
@@ -681,17 +726,23 @@
             detail = typeof error.detail === 'string' ? error.detail : '';
           } catch {}
           if (response.status === 422) {
-            setNotice(detail || 'Проверьте текст вопроса и попробуйте ещё раз.', true);
+            const message = Array.from(question).length > 4000
+              ? 'Вопрос слишком длинный. Максимум — 4000 символов.'
+              : detail || 'Проверьте текст вопроса и попробуйте ещё раз.';
+            setNotice(message, true);
           } else {
             setNotice('Не удалось выполнить поиск. Попробуйте ещё раз позже.', true);
           }
           return;
         }
         const data = await response.json();
-        if (!Array.isArray(data.matches)) throw new Error('invalid-response');
-        if (!data.matches.length) {
-          setNotice('Подходящие материалы не найдены. Попробуйте переформулировать вопрос.');
-          return;
+        if (
+          typeof data.found !== 'boolean'
+          || !['high', 'medium', 'low'].includes(data.confidence)
+          || !Array.isArray(data.matches)
+          || (data.found && !data.matches.length)
+        ) {
+          throw new Error('invalid-response');
         }
         showingSaved = false;
         savedToggle.setAttribute('aria-pressed', 'false');
@@ -700,13 +751,21 @@
           id: `${now.getTime()}-${++entrySequence}`,
           question,
           time: now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
-          matches: data.matches
+          found: data.found && data.confidence !== 'low',
+          confidence: data.confidence,
+          matches: data.found && data.confidence !== 'low' ? data.matches : []
         });
         input.value = '';
         renderFeed();
         setNotice('');
-      } catch {
-        setNotice('Сервер недоступен. Проверьте запуск приложения и повторите попытку.', true);
+      } catch (error) {
+        const invalidResponse = error instanceof Error && error.message === 'invalid-response';
+        setNotice(
+          invalidResponse
+            ? 'Сервис вернул некорректный ответ. Попробуйте ещё раз позже.'
+            : 'Сервер недоступен. Проверьте подключение и повторите попытку.',
+          true
+        );
       } finally {
         sendButton.disabled = false;
         sendButton.textContent = 'Отправить';
