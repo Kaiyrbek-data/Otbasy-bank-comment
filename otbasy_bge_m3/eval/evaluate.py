@@ -17,7 +17,12 @@ from retriever import FAQRetriever  # noqa: E402
 
 EVAL_PATH = ROOT / "eval" / "eval.json"
 RESULTS_PATH = ROOT / "eval" / "results.md"
-LOW_THRESHOLDS = tuple(round(value / 100, 2) for value in range(30, 61, 5))
+LOW_THRESHOLDS = tuple(
+    sorted(
+        {SETTINGS["confidence"]["low_threshold"]}
+        | {round(value / 100, 2) for value in range(30, 61, 5)}
+    )
+)
 
 
 def normalize_answer(answer):
@@ -123,6 +128,10 @@ def percent(value):
     return "N/A" if value is None else f"{value * 100:.2f}%"
 
 
+def is_found(matches, low_threshold):
+    return bool(matches) and matches[0]["cosine"] >= low_threshold
+
+
 def evaluate(retriever, entries, documents, include_review_candidates=False):
     normalized_answers = sorted({normalize_answer(document["answer"]) for document in documents})
     answer_labels = {
@@ -165,28 +174,28 @@ def evaluate(retriever, entries, documents, include_review_candidates=False):
     threshold_results = []
     for label, results_by_case in ranked.items():
         for low_threshold in LOW_THRESHOLDS:
-            in_scope_scores = [
-                results_by_case[entry["case_id"]][0]["cosine"]
+            in_scope_found = [
+                is_found(results_by_case[entry["case_id"]], low_threshold)
                 for entry in in_scope
                 if results_by_case[entry["case_id"]]
             ]
-            out_of_scope_scores = [
-                results_by_case[entry["case_id"]][0]["cosine"]
+            out_of_scope_found = [
+                is_found(results_by_case[entry["case_id"]], low_threshold)
                 for entry in out_of_scope
                 if results_by_case[entry["case_id"]]
             ]
             false_refusals = (
-                sum(score < low_threshold for score in in_scope_scores) / len(in_scope_scores)
-                if in_scope_scores
+                sum(not found for found in in_scope_found) / len(in_scope_found)
+                if in_scope_found
                 else None
             )
             correct_refusals = (
-                sum(score < low_threshold for score in out_of_scope_scores) / len(out_of_scope_scores)
-                if out_of_scope_scores
+                sum(not found for found in out_of_scope_found) / len(out_of_scope_found)
+                if out_of_scope_found
                 else None
             )
             threshold_results.append(
-                (label, low_threshold, false_refusals, correct_refusals, len(out_of_scope_scores))
+                (label, low_threshold, false_refusals, correct_refusals, len(out_of_scope_found))
             )
 
     return ranking_results, threshold_results, len(in_scope), len(out_of_scope)

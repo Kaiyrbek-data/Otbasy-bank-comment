@@ -9,9 +9,10 @@ projection:
 retrieval:
   top_k: 3
   dedupe: true
+  return_matches_on_low: true
 
 confidence:
-  low_threshold: 0.45
+  low_threshold: 0.30
   high_threshold: 0.60
 
 index_version: assets-10k-v1

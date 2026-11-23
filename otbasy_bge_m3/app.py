@@ -33,6 +33,8 @@ def load_settings():
         raise ValueError("retrieval.top_k должен быть целым числом от 1 до 10.")
     if not isinstance(retrieval.get("dedupe"), bool):
         raise ValueError("retrieval.dedupe должен быть логическим значением.")
+    if not isinstance(retrieval.get("return_matches_on_low"), bool):
+        raise ValueError("retrieval.return_matches_on_low должен быть логическим значением.")
     if not all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in (low, high)):
         raise ValueError("Пороги confidence должны быть числами.")
     if not -1 <= low < high <= 1:
@@ -183,7 +185,7 @@ def search(body: Question, request: Request):
     if cosine is None or cosine < low_threshold:
         confidence = "low"
         found = False
-        visible_matches = []
+        visible_matches = matches if retrieval["return_matches_on_low"] else []
     elif cosine >= high_threshold:
         confidence = "high"
         found = True

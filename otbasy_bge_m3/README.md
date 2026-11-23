@@ -68,7 +68,11 @@ HF_HUB_OFFLINE=1 python -m uvicorn app:app --host 0.0.0.0 --port 8000
 
 Ответ `/search` содержит `matches`, `found` и `confidence`. Значения
 `confidence`: `high` при cosine не ниже 0.60, `medium` между порогами, `low`
-ниже 0.45. При `low` возвращаются `found: false` и пустой `matches`.
+ниже `confidence.low_threshold` (по умолчанию 0.30). При `low` API возвращает
+`found: false`; если `retrieval.return_matches_on_low` равно `true` (по
+умолчанию), `matches` содержит ближайшие результаты, иначе список пуст.
+Интерфейс показывает низкоуверенный результат как предупреждение, не выдавая
+его за подтверждённый ответ. Порог `high_threshold` по умолчанию равен 0.60.
 `cosine` — сходство в диапазоне от −1 до 1, не вероятность корректности.
 Текст пользовательского вопроса в JSONL-лог не записывается.
 

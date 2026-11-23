@@ -21,8 +21,11 @@ class FakeRetriever:
         return self.matches
 
 
-def make_request(retriever):
-    state = SimpleNamespace(settings=app_module.SETTINGS, retriever=retriever)
+def make_request(retriever, settings=None):
+    state = SimpleNamespace(
+        settings=settings or app_module.SETTINGS,
+        retriever=retriever,
+    )
     return SimpleNamespace(app=SimpleNamespace(state=state))
 
 
@@ -60,7 +63,7 @@ def test_known_question_uses_configured_defaults(monkeypatch):
     assert retriever.calls[0]["dedupe"] is True
 
 
-def test_out_of_scope_mock_returns_explicit_refusal(monkeypatch):
+def test_low_confidence_returns_matches_but_keeps_found_false(monkeypatch):
     monkeypatch.setattr(app_module, "write_query_log", lambda *args: None)
     retriever = FakeRetriever(
         [{"id": 9, "answer": "Несвязанный ответ.", "cosine": 0.2}]
@@ -69,6 +72,42 @@ def test_out_of_scope_mock_returns_explicit_refusal(monkeypatch):
     result = search(
         Question(question="Как приготовить бешбармак?"),
         make_request(retriever),
+    )
+
+    assert result == {
+        "matches": [{"id": 9, "answer": "Несвязанный ответ.", "cosine": 0.2}],
+        "found": False,
+        "confidence": "low",
+    }
+
+
+def test_low_confidence_matches_can_be_disabled_by_config(monkeypatch):
+    monkeypatch.setattr(app_module, "write_query_log", lambda *args: None)
+    settings = {
+        **app_module.SETTINGS,
+        "retrieval": {
+            **app_module.SETTINGS["retrieval"],
+            "return_matches_on_low": False,
+        },
+    }
+
+    result = search(
+        Question(question="Как приготовить бешбармак?"),
+        make_request(
+            FakeRetriever([{"id": 9, "answer": "Несвязанный ответ.", "cosine": 0.2}]),
+            settings,
+        ),
+    )
+
+    assert result == {"matches": [], "found": False, "confidence": "low"}
+
+
+def test_empty_retrieval_still_returns_empty_matches_and_found_false(monkeypatch):
+    monkeypatch.setattr(app_module, "write_query_log", lambda *args: None)
+
+    result = search(
+        Question(question="Вопрос"),
+        make_request(FakeRetriever([])),
     )
 
     assert result == {"matches": [], "found": False, "confidence": "low"}

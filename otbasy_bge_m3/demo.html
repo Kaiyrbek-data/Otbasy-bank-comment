@@ -3,43 +3,39 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#171a1f" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#008B8A">
   <title>Ассистент по жилищной очереди</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: light;
-      --page: #f4f5f7;
+      --page: #fff;
       --surface: #fff;
-      --surface-muted: #f8f9fa;
-      --text: #252a31;
-      --muted: #69727e;
-      --line: #e0e4e8;
-      --accent: #465365;
-      --accent-soft: #eef1f5;
-      --danger: #a63d37;
-      --danger-soft: #fff0ef;
-      --warning: #805900;
-      --warning-soft: #fff6d8;
-      font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        color-scheme: dark;
-        --page: #171a1f;
-        --surface: #20242b;
-        --surface-muted: #252a32;
-        --text: #edf0f3;
-        --muted: #a3acb7;
-        --line: #343b45;
-        --accent: #c5cfdb;
-        --accent-soft: #2a313b;
-        --danger: #f1aaa5;
-        --danger-soft: #3b2929;
-        --warning: #f1d27b;
-        --warning-soft: #3b3424;
-      }
+      --surface-muted: #f4fbfa;
+      --text: #1F2A2A;
+      --muted: #526565;
+      --line: #d9e8e6;
+      --teal: #008B8A;
+      --teal-dark: #006B6A;
+      --teal-light: #63D1C8;
+      --orange: #F2812E;
+      --yellow: #F4B941;
+      --blue: #00BAFF;
+      --peach: #FDBE9C;
+      --accent: var(--teal);
+      --accent-soft: #e7f7f5;
+      --danger: #6f3519;
+      --danger-soft: #fff0e8;
+      --warning: #1F2A2A;
+      --warning-soft: var(--yellow);
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 24px;
+      font: 15px/1.5 Ubuntu, Helvetica, Arial, sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -52,7 +48,7 @@
       background: var(--page);
     }
 
-    button, textarea, select { font: inherit; }
+    button, textarea { font: inherit; }
     button { color: inherit; }
 
     .column {
@@ -138,23 +134,6 @@
       scrollbar-width: thin;
     }
 
-    .chip {
-      flex: 0 0 auto;
-      min-height: 34px;
-      padding: 6px 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--surface);
-      color: var(--text);
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .chip:hover, .chip:focus-visible {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
     .composer { padding: 15px; }
     .composer-row { display: flex; align-items: flex-start; gap: 11px; }
     .composer-body { min-width: 0; flex: 1; }
@@ -178,16 +157,6 @@
 
     .composer-hint { color: var(--muted); font-size: 11px; }
 
-    .select-k {
-      min-height: 36px;
-      padding: 5px 8px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      color: var(--text);
-      background: var(--surface);
-      font-size: 12px;
-    }
-
     .send, .action, .saved-toggle {
       display: inline-flex;
       min-height: 36px;
@@ -209,11 +178,7 @@
       font-weight: 650;
     }
 
-    @media (prefers-color-scheme: dark) {
-      .send { color: #171a1f; }
-    }
-
-    .send:disabled { opacity: .65; cursor: wait; }
+    .send:disabled { cursor: wait; }
     .saved-toggle { min-height: 30px; padding: 4px 9px; color: var(--muted); font-size: 12px; }
     .saved-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
 
@@ -242,24 +207,6 @@
       color: var(--muted);
       line-height: 1.55;
     }
-
-    .loading {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .spinner {
-      width: 14px;
-      height: 14px;
-      border: 2px solid var(--line);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin .75s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; scroll-behavior: auto !important; } }
 
     .feed { display: grid; gap: 12px; }
 
@@ -317,8 +264,8 @@
 
     .action { min-height: 32px; padding: 5px 9px; color: var(--muted); font-size: 12px; }
     .action svg { width: 15px; height: 15px; }
-    .action[aria-pressed="true"].helpful { border-color: var(--orange); color: var(--danger); background: var(--danger-soft); }
-    .action[aria-pressed="true"].review { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+    .action[aria-pressed="true"].helpful { border-color: var(--orange); color: #1F2A2A; background: var(--peach); }
+    .action[aria-pressed="true"].review { border-color: var(--teal); color: var(--teal-dark); background: var(--accent-soft); }
 
     .similar-list { display: grid; gap: 8px; padding: 0 10px 10px; }
     .similar-item { padding-top: 8px; border-top: 1px solid var(--line); }
@@ -335,7 +282,7 @@
       font-size: 13px;
     }
 
-    button:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible {
+    button:focus-visible, textarea:focus-visible, summary:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
     }
@@ -349,24 +296,413 @@
       .assistant-reply { padding-left: 10px; }
       .composer-hint { display: none; }
       .composer-controls { justify-content: flex-end; }
-      .composer-controls > div { flex-wrap: wrap; justify-content: flex-end; }
+      .composer-actions { flex-wrap: wrap; justify-content: flex-end; }
+    }
+
+    body {
+      color: var(--text);
+      background: #fff;
+      font-family: Ubuntu, Helvetica, Arial, sans-serif;
+    }
+
+    .column {
+      width: min(100% - 28px, 620px);
+      padding: 22px 0 48px;
+    }
+
+    .profile {
+      position: relative;
+      overflow: hidden;
+      gap: 14px;
+      padding: 18px;
+      border: 0;
+      border-radius: 16px;
+      color: #fff;
+      background: var(--teal);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+    }
+
+    .profile .profile-avatar {
+      position: relative;
+      z-index: 1;
+      width: 52px;
+      height: 52px;
+      flex-basis: 52px;
+      border: 2px solid rgba(255, 255, 255, .75);
+      color: #fff;
+      background: transparent;
+    }
+
+    .profile-avatar svg { width: 29px; height: 29px; }
+    .profile-copy { position: relative; z-index: 1; max-width: calc(100% - 180px); }
+    .profile h1 { font-size: 16px; line-height: 1.35; font-weight: 700; }
+    .profile p { color: #fff; font-size: 12px; line-height: 1.45; font-weight: 700; }
+
+    .brand-shapes {
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      right: 0;
+      width: 145px;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .brand-shape { position: absolute; display: block; }
+    .shape-orange { top: 17px; right: 18px; width: 38px; height: 38px; border-radius: 12px; background: var(--orange); transform: rotate(12deg); }
+    .shape-yellow { right: 73px; bottom: 15px; width: 24px; height: 24px; border-radius: 50%; background: var(--yellow); }
+    .shape-blue { top: 16px; right: 76px; width: 18px; height: 50px; border-radius: 10px; background: var(--blue); transform: rotate(-18deg); }
+    .shape-light { right: 18px; bottom: 12px; width: 20px; height: 20px; border-radius: 50%; background: var(--teal-light); }
+
+    .prototype-note {
+      display: inline-flex;
+      margin: 12px 0 3px;
+      padding: 6px 11px;
+      border-radius: 12px;
+      color: #1F2A2A;
+      background: var(--yellow);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .toolbar { margin: 18px 2px 8px; }
+    .section-title {
+      color: var(--teal-dark);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .health { color: var(--teal-dark); font-size: 11px; }
+    .health::before { background: var(--yellow); }
+    .health.starting::before { background: var(--yellow); }
+    .health.ready::before { background: var(--teal); }
+    .health.unavailable::before { background: var(--orange); }
+
+    .topics {
+      width: calc(100% + 20px);
+      gap: 8px;
+      margin: 0 -10px 17px;
+      padding: 4px 14px 12px;
+      scroll-padding-inline: 14px;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      scrollbar-color: var(--teal-light) transparent;
+      mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+    }
+
+    .topic-button {
+      display: flex;
+      flex: 0 0 84px;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-height: 106px;
+      padding: 3px 2px 5px;
+      border: 0;
+      border-radius: 12px;
+      color: var(--text);
+      background: transparent;
+      cursor: pointer;
+      scroll-snap-align: start;
+    }
+
+    .topic-icon {
+      display: grid;
+      flex: 0 0 64px;
+      width: 64px;
+      height: 64px;
+      place-items: center;
+      border-radius: 50%;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .topic-icon svg { width: 30px; height: 30px; }
+    .topic-icon.tone-orange, .topic-icon.tone-yellow { color: #1F2A2A; }
+    .topic-icon.tone-orange { background: var(--orange); }
+    .topic-icon.tone-teal { color: #fff; background: var(--teal); }
+    .topic-icon.tone-blue { color: #fff; background: var(--blue); }
+    .topic-icon.tone-yellow { background: var(--yellow); }
+
+    .topic-label {
+      display: -webkit-box;
+      width: 76px;
+      height: 2.5em;
+      overflow: hidden;
+      color: var(--teal-dark);
+      font-size: 10px;
+      line-height: 1.25;
+      text-align: center;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+
+    .topic-button:hover .topic-icon { transform: translateY(-2px) scale(1.04); }
+    .topic-button:active .topic-icon { transform: scale(.96); }
+    .topic-button:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+    .topic-button:focus-visible .topic-icon { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--teal); }
+
+    .composer, .post {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+    }
+
+    .composer { padding: 15px; }
+    .avatar {
+      border: 0;
+      color: var(--teal-dark);
+      background: var(--accent-soft);
+      font-weight: 700;
+    }
+
+    .avatar svg {
+      width: 19px;
+      height: 19px;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    textarea {
+      min-height: 88px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--text);
+      background: var(--surface-muted);
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    textarea::placeholder { color: var(--teal-dark); opacity: .8; }
+    .composer-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 8px; }
+    .composer-controls { gap: 12px; }
+    .composer-meta { display: flex; min-width: 0; flex: 1; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; }
+    .composer-hint { color: var(--teal-dark); font-size: 11px; }
+    .char-count { color: var(--teal-dark); font-size: 11px; white-space: nowrap; }
+
+    .send {
+      min-width: 112px;
+      min-height: 40px;
+      padding: 8px 17px;
+      border: 1px solid var(--teal);
+      border-radius: 11px;
+      color: #fff;
+      background: var(--teal);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .send svg { width: 18px; height: 18px; }
+    .send:hover { border-color: var(--teal-dark); background: var(--teal-dark); }
+    .send:disabled { color: #fff; }
+    button:not(.topic-button) { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background-color .2s ease; }
+    button:not(.topic-button):hover:not(:disabled) { transform: translateY(-1px); }
+    button:not(.topic-button):active:not(:disabled) { transform: scale(.98); }
+    .saved-toggle, .action {
+      border-radius: 10px;
+      font-family: inherit;
+    }
+
+    .saved-toggle { color: var(--teal-dark); }
+    .saved-toggle[aria-pressed="true"] { border-color: var(--teal); color: var(--teal-dark); background: var(--accent-soft); }
+    .notice { color: var(--teal-dark); }
+    .notice.error { color: #763713; font-weight: 500; }
+    .feed { gap: 12px; }
+    .post { padding: 16px; }
+    .comment-name { color: var(--teal-dark); }
+    .comment-time { color: var(--muted); }
+    .comment-text, .answer { color: var(--text); }
+
+    .assistant-reply {
+      margin: 13px 0 0 44px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--teal);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .assistant-reply .avatar {
+      color: #fff;
+      background: var(--teal);
+    }
+
+    .answer { font-size: 15px; line-height: 1.55; }
+    .matched-question { color: var(--teal-dark); }
+    .matched-question strong { color: var(--text); }
+
+    .confidence-note {
+      border: 0;
+      border-radius: 12px;
+      color: #1F2A2A;
+      background: var(--yellow);
+      font-weight: 500;
+    }
+
+    .not-found {
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: #1F2A2A;
+      background: var(--peach);
+    }
+
+    .low-confidence-note { margin: 0; }
+    details.nearest-answer {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    details.nearest-answer > summary { color: var(--teal-dark); font-weight: 700; }
+    .nearest-answer > .answer, .nearest-answer > .matched-question { margin: 8px 10px 0; }
+    .nearest-answer > .sources { margin: 10px; }
+
+    details.sources, details.similar {
+      border-color: var(--line);
+      border-radius: 12px;
+      background: var(--surface-muted);
+    }
+
+    details > summary { color: var(--teal-dark); }
+    details > summary:hover { color: var(--teal); }
+    .source-label, .similar-answer { color: var(--teal-dark); }
+    .similar-question { color: var(--text); }
+    .post-actions { gap: 8px; }
+
+    .action {
+      min-height: 35px;
+      border-color: var(--line);
+      color: var(--teal-dark);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .action:hover { border-color: var(--teal); background: var(--accent-soft); }
+    .action[aria-pressed="true"].helpful {
+      border-color: var(--orange);
+      color: #1F2A2A;
+      background: var(--peach);
+      font-weight: 700;
+    }
+
+    .action[aria-pressed="true"].review {
+      border-color: var(--teal);
+      color: var(--teal-dark);
+      background: var(--accent-soft);
+      font-weight: 700;
+    }
+
+    .action svg { width: 16px; height: 16px; stroke-width: 2.2; }
+    .empty { border-radius: 14px; color: var(--teal-dark); background: #fff; }
+
+    .empty-state { display: grid; justify-items: center; gap: 12px; padding: 24px 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, .06); }
+    .empty-illustration { position: relative; display: flex; width: 92px; height: 72px; align-items: center; justify-content: center; }
+    .empty-illustration svg { position: absolute; }
+    .empty-home { width: 56px; height: 56px; color: var(--teal); }
+    .empty-key { right: 0; bottom: 1px; width: 34px; height: 34px; color: var(--orange); transform: rotate(-25deg); }
+    .empty-title { margin: 0; color: var(--teal-dark); font-size: 16px; font-weight: 700; }
+    .empty-copy { max-width: 360px; margin: -4px 0 0; color: var(--muted); font-size: 13px; }
+    .sample-questions { display: grid; width: 100%; gap: 8px; margin-top: 4px; }
+    .sample-question { min-height: 40px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 12px; color: var(--teal-dark); background: #fff; text-align: left; cursor: pointer; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+    .sample-question:hover { transform: translateY(-2px); border-color: var(--teal); box-shadow: 0 2px 8px rgba(0, 0, 0, .06); }
+
+    .post-enter { animation: message-in .2s ease-out both; }
+    @keyframes message-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .typing-indicator { display: inline-flex; min-height: 30px; align-items: center; gap: 6px; padding: 4px 0; }
+    .typing-indicator span { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); animation: typing-dot 1s ease-in-out infinite; }
+    .typing-indicator span:nth-child(2) { animation-delay: .15s; }
+    .typing-indicator span:nth-child(3) { animation-delay: .3s; }
+    @keyframes typing-dot { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+
+    button:focus-visible, textarea:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 520px) {
+      .column { width: min(100% - 20px, 620px); padding: 12px 0 172px; }
+      .profile { padding: 14px; }
+      .profile h1 { font-size: 14px; }
+      .profile p { font-size: 11px; }
+      .profile .profile-avatar { width: 46px; height: 46px; flex-basis: 46px; }
+      .brand-shapes { width: 75px; }
+      .shape-orange { top: 13px; right: 9px; width: 28px; height: 28px; }
+      .shape-yellow { right: 42px; bottom: 12px; width: 18px; height: 18px; }
+      .shape-blue { top: 15px; right: 45px; width: 14px; height: 36px; }
+      .shape-light { right: 10px; bottom: 9px; width: 15px; height: 15px; }
+      .profile-copy { max-width: calc(100% - 120px); }
+      .assistant-reply, .post-actions { margin-left: 33px; }
+      .assistant-reply { padding: 10px; }
+      .composer-hint { display: none; }
+      .column .composer {
+        position: fixed;
+        z-index: 20;
+        bottom: 0;
+        left: 50%;
+        width: min(100% - 16px, 620px);
+        margin: 0;
+        padding-bottom: max(15px, env(safe-area-inset-bottom));
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 -4px 18px rgba(0, 0, 0, .1);
+        transform: translateX(-50%);
+      }
+
+      .composer-row { gap: 8px; }
+      .composer-row > .avatar { flex-basis: 32px; width: 32px; height: 32px; font-size: 11px; }
+      .composer-controls { align-items: center; justify-content: space-between; gap: 8px; }
+      .composer-meta { flex: 0 1 auto; }
+      .send { min-width: 44px; padding: 9px 12px; }
+      .send span { display: none; }
+      .send svg { width: 20px; height: 20px; }
+      textarea { min-height: 64px; max-height: 112px; }
+      .topics { scroll-padding-inline: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
     }
   </style>
 </head>
 <body>
   <main class="column">
+    <!-- Место для логотипа: добавим отдельно позже. -->
     <header class="profile">
-      <div class="avatar profile-avatar" aria-hidden="true">А</div>
+      <div class="brand-shapes" aria-hidden="true">
+        <span class="brand-shape shape-orange"></span>
+        <span class="brand-shape shape-yellow"></span>
+        <span class="brand-shape shape-blue"></span>
+        <span class="brand-shape shape-light"></span>
+      </div>
+      <div class="avatar profile-avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 10.5 12 3l9 7.5M5.5 9.5V20h13V9.5M9 20v-6h6v6"></path>
+        </svg>
+      </div>
       <div class="profile-copy">
-        <h1>Ассистент по жилищной очереди</h1>
+        <h1>АССИСТЕНТ ПО ЖИЛИЩНОЙ ОЧЕРЕДИ</h1>
         <p>Отвечаю по материалам базы знаний. Не заменяет консультацию специалиста</p>
       </div>
     </header>
+    <p class="prototype-note">Учебный прототип · не официальный сервис</p>
 
     <section aria-labelledby="topicsTitle">
       <div class="toolbar">
         <h2 class="section-title" id="topicsTitle">Темы</h2>
-        <span class="health" id="health" role="status">Проверяю сервис…</span>
+        <span class="health starting" id="health" role="status">Сервис запускается…</span>
       </div>
       <div class="topics" id="topics" aria-label="Темы базы знаний">
         <span class="composer-hint">Загружаю темы…</span>
@@ -379,15 +715,18 @@
         <div class="composer-body">
           <textarea id="question" rows="2" aria-label="Ваш вопрос" placeholder="Добавьте вопрос…"></textarea>
           <div class="composer-controls">
-            <span class="composer-hint">Enter — отправить · Shift+Enter — новая строка</span>
-            <div style="display:flex;align-items:center;gap:7px">
-              <select class="select-k" id="topK" aria-label="Количество вариантов">
-                <option value="1">1 ответ</option>
-                <option value="3" selected>3 ответа</option>
-                <option value="5">5 ответов</option>
-                <option value="10">10 ответов</option>
-              </select>
-              <button class="send" id="send" type="submit">Отправить</button>
+            <div class="composer-meta">
+              <span class="composer-hint">Enter — отправить · Shift+Enter — новая строка</span>
+              <span class="char-count" id="charCount" aria-live="polite">0 / 4000</span>
+            </div>
+            <div class="composer-actions">
+              <button class="send" id="send" type="submit">
+                <span>Отправить</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m22 2-7 20-4-9-9-4Z"></path>
+                  <path d="M22 2 11 13"></path>
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -407,8 +746,9 @@
   <script>
     const form = document.querySelector('#form');
     const input = document.querySelector('#question');
+    const charCount = document.querySelector('#charCount');
     const sendButton = document.querySelector('#send');
-    const topK = document.querySelector('#topK');
+    const TOP_K = 3;
     const topicsNode = document.querySelector('#topics');
     const feed = document.querySelector('#feed');
     const notice = document.querySelector('#notice');
@@ -431,9 +771,58 @@
       'Субсидия на аренду': 'Кто может получить субсидию на аренду жилья?'
     };
 
+    const emptyExamples = [
+      sampleQuestions['Собственность'],
+      sampleQuestions['Доля в жилье'],
+      sampleQuestions['Жилищный сертификат']
+    ];
+
+    const iconPaths = {
+      home: ['M3 10.5 12 3l9 7.5M5.5 9.5V20h13V9.5M9 20v-6h6v6'],
+      percent: ['M19 5 5 19', 'M7 7h.01', 'M17 17h.01'],
+      key: ['M21 2l-2 2m-7.5 7.5a5 5 0 1 1-1.42-1.42L19 2l3 3-2 2 2 2-3 3-2-2-2 2'],
+      document: ['M7 3h7l5 5v13H7zM14 3v5h5', 'M10 13h6M10 17h6'],
+      list: ['M8 6h13M8 12h13M8 18h13', 'M3 6h.01M3 12h.01M3 18h.01'],
+      cancel: ['M18 6 6 18M6 6l12 12'],
+      heart: ['M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6l1.2 1.2L12 21l7.6-7.6 1.2-1.2a5.4 5.4 0 0 0 0-7.6Z'],
+      building: ['M3 21h18M5 21V5l7-2v18M12 8h7v13', 'M8 7h.01M8 11h.01M8 15h.01M15 12h.01M18 12h.01M15 16h.01M18 16h.01'],
+      area: ['M4 4h16v16H4zM4 12h16M12 4v16'],
+      arrows: ['M4 8h15l-3-3M20 16H5l3 3'],
+      wallet: ['M3 8V6.5A2.5 2.5 0 0 1 5.5 4H20v16H5.5A2.5 2.5 0 0 1 3 17.5zM3 8h17', 'M16 13h.01'],
+      calendar: ['M3 5h18v16H3zM16 3v4M8 3v4M3 10h18'],
+      pin: ['M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0M12 10h.01'],
+      question: ['M9.5 9a2.5 2.5 0 1 1 4.7 1.2c-.9 1.1-2.2 1.5-2.2 3.3M12 17.5h.01']
+    };
+
+    function iconForTopic(topicName) {
+      const name = String(topicName).toLocaleLowerCase('ru-RU').replace(/ё/g, 'е');
+      if (name.includes('сняти') && name.includes('учет')) return 'cancel';
+      if (name.includes('аварийн')) return 'building';
+      if (['сирот', 'семь', 'многодет'].some((word) => name.includes(word))) return 'heart';
+      if (name.includes('распредел')) return 'arrows';
+      if (name.includes('субсид') || name.includes('аренд')) return 'wallet';
+      if (['доход', 'ипотек', 'процент'].some((word) => name.includes(word))) return 'percent';
+      if (
+        ['инвентаризац', 'заявлен', 'документ', 'договор', 'госрегистрац']
+          .some((word) => name.includes(word))
+        || /регистрац.*(заявлен|документ|договор)/.test(name)
+      ) return 'document';
+      if (['площад', 'комнат', 'дол'].some((word) => name.includes(word))) return 'area';
+      if (name.includes('срок') || name.includes('учет')) return 'calendar';
+      if (['список', 'списки', 'очеред'].some((word) => name.includes(word))) return 'list';
+      if (name.includes('регистрац') || name.includes('адрес')) return 'pin';
+      if (['собствен', 'сертификат', 'жиль', 'жилищ'].some((word) => name.includes(word))) return 'key';
+      if (['другое', 'прочее', 'общий вопрос'].some((word) => name.includes(word))) return 'question';
+      return 'home';
+    }
+
     function setNotice(message = '', isError = false) {
       notice.textContent = message;
       notice.classList.toggle('error', isError);
+    }
+
+    function updateCharacterCount() {
+      charCount.textContent = `${Array.from(input.value).length} / 4000`;
     }
 
     function readStorage(key, fallback) {
@@ -466,6 +855,29 @@
       return node('div', className, text);
     }
 
+    function svgIcon(name) {
+      const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('viewBox', '0 0 24 24');
+      icon.setAttribute('fill', 'none');
+      icon.setAttribute('stroke', 'currentColor');
+      icon.setAttribute('stroke-width', '2.2');
+      icon.setAttribute('stroke-linecap', 'round');
+      icon.setAttribute('stroke-linejoin', 'round');
+      icon.setAttribute('aria-hidden', 'true');
+      (iconPaths[name] || iconPaths.home).forEach((data) => {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', data);
+        icon.append(path);
+      });
+      return icon;
+    }
+
+    function assistantAvatar() {
+      const element = node('div', 'avatar');
+      element.append(svgIcon('home'));
+      return element;
+    }
+
     function addField(parent, label, value) {
       const line = node('div', 'source-line');
       line.append(node('span', 'source-label', `${label}:`), node('span', '', value || 'Не указано'));
@@ -495,7 +907,7 @@
       icon.setAttribute('viewBox', '0 0 24 24');
       icon.setAttribute('fill', 'none');
       icon.setAttribute('stroke', 'currentColor');
-      icon.setAttribute('stroke-width', '1.8');
+      icon.setAttribute('stroke-width', '2.2');
       icon.setAttribute('stroke-linecap', 'round');
       icon.setAttribute('stroke-linejoin', 'round');
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -505,8 +917,111 @@
       return button;
     }
 
+    function makeMatchedQuestion(match) {
+      const matchedQuestion = node('p', 'matched-question');
+      matchedQuestion.append(
+        node('strong', '', 'Найдено по вопросу: '),
+        document.createTextNode(match.question || 'Вопрос не указан')
+      );
+      return matchedQuestion;
+    }
+
+    function makeFeedbackActions(entry, match, rank) {
+      const feedback = readStorage('otbasai-feedback', {});
+      const state = feedback[feedbackKey(entry, match, rank)] || {};
+      const actions = node('div', 'post-actions');
+      const helpful = makeAction(
+        'Полезно',
+        'helpful',
+        Boolean(state.helpful),
+        'M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6l1.2 1.2L12 21l7.6-7.6 1.2-1.2a5.4 5.4 0 0 0 0-7.6Z'
+      );
+      const review = makeAction(
+        'Нужна проверка',
+        'review',
+        Boolean(state.review),
+        'M12 9v4m0 4h.01M10.3 3.9 1.8 18.5A1.7 1.7 0 0 0 3.2 21h17.6a1.7 1.7 0 0 0 1.4-2.5L13.7 3.9a2 2 0 0 0-3.4 0Z'
+      );
+      helpful.addEventListener('click', () => saveFeedback(entry, match, rank, 'helpful', helpful, review));
+      review.addEventListener('click', () => saveFeedback(entry, match, rank, 'review', review, helpful));
+      actions.append(helpful, review);
+
+      const savedAnswers = readStorage('otbasai-saved', []);
+      const isSaved = Array.isArray(savedAnswers) && savedAnswers.some((item) => item.answer === match.answer);
+      const saveButton = node('button', 'action', isSaved ? 'Сохранено' : 'Сохранить ответ');
+      saveButton.type = 'button';
+      saveButton.setAttribute('aria-pressed', String(isSaved));
+      saveButton.addEventListener('click', () => toggleSaved(match));
+      actions.append(saveButton);
+      return actions;
+    }
+
+    function makeEmptyState() {
+      const empty = node('div', 'empty empty-state');
+      const illustration = node('div', 'empty-illustration');
+      illustration.setAttribute('aria-hidden', 'true');
+      const house = svgIcon('home');
+      house.classList.add('empty-home');
+      const key = svgIcon('key');
+      key.classList.add('empty-key');
+      illustration.append(house, key);
+      empty.append(
+        illustration,
+        node('h3', 'empty-title', 'С чего начнём?'),
+        node('p', 'empty-copy', 'Выберите пример или задайте свой вопрос.')
+      );
+      const examples = node('div', 'sample-questions');
+      emptyExamples.forEach((question) => {
+        const button = node('button', 'sample-question', question);
+        button.type = 'button';
+        button.addEventListener('click', () => {
+          input.value = question;
+          updateCharacterCount();
+          input.focus();
+        });
+        examples.append(button);
+      });
+      empty.append(examples);
+      return empty;
+    }
+
+    function showLoadingPost(question) {
+      feed.querySelector('.empty')?.remove();
+      const post = node('article', 'post post-enter loading-post');
+      const userComment = node('div', 'comment');
+      userComment.append(avatar('Вы'));
+      const userContent = node('div', 'comment-content');
+      const userHead = node('div', 'comment-head');
+      userHead.append(node('span', 'comment-name', 'Вы'));
+      userContent.append(userHead, node('p', 'comment-text', question));
+      userComment.append(userContent);
+
+      const reply = node('div', 'assistant-reply');
+      const assistantComment = node('div', 'comment');
+      assistantComment.append(assistantAvatar());
+      const assistantContent = node('div', 'comment-content');
+      const assistantHead = node('div', 'comment-head');
+      assistantHead.append(node('span', 'comment-name', 'Ассистент'));
+      const indicator = node('div', 'typing-indicator');
+      indicator.setAttribute('role', 'status');
+      indicator.setAttribute('aria-label', 'Ассистент готовит ответ');
+      for (let index = 0; index < 3; index += 1) indicator.append(node('span'));
+      assistantContent.append(assistantHead, indicator);
+      assistantComment.append(assistantContent);
+      reply.append(assistantComment);
+      post.append(userComment, reply);
+      feed.append(post);
+    }
+
+    function removeLoadingPost() {
+      const loadingPost = feed.querySelector('.loading-post');
+      if (!loadingPost) return;
+      loadingPost.remove();
+      renderFeed();
+    }
+
     function renderPost(entry) {
-      const post = node('article', 'post');
+      const post = node('article', 'post post-enter');
       const userComment = node('div', 'comment');
       userComment.append(avatar('Вы'));
       const userContent = node('div', 'comment-content');
@@ -519,17 +1034,37 @@
       if (entry.found === false) {
         const reply = node('div', 'assistant-reply');
         const assistantComment = node('div', 'comment');
-        assistantComment.append(avatar('А'));
+        assistantComment.append(assistantAvatar());
         const assistantContent = node('div', 'comment-content');
         const assistantHead = node('div', 'comment-head');
         assistantHead.append(node('span', 'comment-name', 'Ассистент'));
-        assistantContent.append(
-          assistantHead,
-          node('p', 'not-found', 'Не нашёл подходящего ответа. Обратитесь к администратору.')
-        );
+        assistantContent.append(assistantHead);
+        const primary = entry.matches[0];
+        if (primary) {
+          assistantContent.append(
+            node(
+              'p',
+              'not-found low-confidence-note',
+              'Не уверен, что это ваш случай. Ближайший найденный ответ ниже, проверьте условия или обратитесь к администратору'
+            )
+          );
+          const nearestAnswer = node('details', 'nearest-answer');
+          nearestAnswer.append(node('summary', '', 'Показать ближайший ответ'));
+          nearestAnswer.append(
+            node('p', 'answer', primary.answer || 'В базе не найден текст ответа.'),
+            makeMatchedQuestion(primary),
+            makeSources(primary)
+          );
+          assistantContent.append(nearestAnswer);
+        } else {
+          assistantContent.append(
+            node('p', 'not-found', 'Не нашёл подходящего ответа. Обратитесь к администратору.')
+          );
+        }
         assistantComment.append(assistantContent);
         reply.append(assistantComment);
         post.append(reply);
+        if (primary) post.append(makeFeedbackActions(entry, primary, 1));
         return post;
       }
 
@@ -537,7 +1072,7 @@
       if (primary) {
         const reply = node('div', 'assistant-reply');
         const assistantComment = node('div', 'comment');
-        assistantComment.append(avatar('А'));
+        assistantComment.append(assistantAvatar());
         const assistantContent = node('div', 'comment-content');
         const assistantHead = node('div', 'comment-head');
         assistantHead.append(node('span', 'comment-name', 'Ассистент'));
@@ -550,33 +1085,10 @@
         assistantContent.append(
           node('p', 'answer', primary.answer || 'В базе не найден текст ответа.')
         );
-        const matchedQuestion = node('p', 'matched-question');
-        matchedQuestion.append(
-          node('strong', '', 'Найдено по вопросу: '),
-          document.createTextNode(primary.question || 'Вопрос не указан')
-        );
-        assistantContent.append(matchedQuestion);
+        assistantContent.append(makeMatchedQuestion(primary));
         assistantComment.append(assistantContent);
         reply.append(assistantComment, makeSources(primary));
-        post.append(reply);
-
-        const feedback = readStorage('otbasai-feedback', {});
-        const state = feedback[feedbackKey(entry, primary, 1)] || {};
-        const actions = node('div', 'post-actions');
-        const helpful = makeAction('Полезно', 'helpful', Boolean(state.helpful), 'M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6l1.2 1.2L12 21l7.6-7.6 1.2-1.2a5.4 5.4 0 0 0 0-7.6Z');
-        const review = makeAction('Нужна проверка', 'review', Boolean(state.review), 'M12 9v4m0 4h.01M10.3 3.9 1.8 18.5A1.7 1.7 0 0 0 3.2 21h17.6a1.7 1.7 0 0 0 1.4-2.5L13.7 3.9a2 2 0 0 0-3.4 0Z');
-        helpful.addEventListener('click', () => saveFeedback(entry, primary, 1, 'helpful'));
-        review.addEventListener('click', () => saveFeedback(entry, primary, 1, 'review'));
-        actions.append(helpful, review);
-
-        const savedAnswers = readStorage('otbasai-saved', []);
-        const isSaved = Array.isArray(savedAnswers) && savedAnswers.some((item) => item.answer === primary.answer);
-        const saveButton = node('button', 'action', isSaved ? 'Сохранено' : 'Сохранить ответ');
-        saveButton.type = 'button';
-        saveButton.setAttribute('aria-pressed', String(isSaved));
-        saveButton.addEventListener('click', () => toggleSaved(primary));
-        actions.append(saveButton);
-        post.append(actions);
+        post.append(reply, makeFeedbackActions(entry, primary, 1));
 
         const similar = entry.matches.slice(1);
         if (similar.length) {
@@ -599,13 +1111,17 @@
       return post;
     }
 
-    function saveFeedback(entry, match, rank, selected) {
+    function saveFeedback(entry, match, rank, selected, button, otherButton) {
       const all = readStorage('otbasai-feedback', {});
       const key = feedbackKey(entry, match, rank);
       const current = all[key] || {};
-      all[key] = current[selected] ? {} : { helpful: selected === 'helpful', review: selected === 'review' };
+      const isPressed = !current[selected];
+      all[key] = isPressed
+        ? { helpful: selected === 'helpful', review: selected === 'review' }
+        : {};
       if (writeStorage('otbasai-feedback', all)) {
-        renderFeed();
+        button.setAttribute('aria-pressed', String(isPressed));
+        otherButton.setAttribute('aria-pressed', 'false');
         setNotice(selected === 'helpful' ? 'Спасибо за отзыв.' : 'Отметка сохранена.');
       }
     }
@@ -649,7 +1165,7 @@
 
       feedTitle.textContent = 'Лента';
       if (!entries.length) {
-        feed.append(node('div', 'empty', 'Задайте вопрос — ответ и найденные материалы появятся здесь.'));
+        feed.append(makeEmptyState());
         return;
       }
       [...entries].reverse().forEach((entry) => feed.append(renderPost(entry)));
@@ -661,15 +1177,21 @@
         if (!response.ok) throw new Error('topics');
         const topics = await response.json();
         topicsNode.replaceChildren();
-        topics.forEach((topic) => {
-          const chip = node('button', 'chip', topic.name);
-          chip.type = 'button';
-          chip.title = `Пример вопроса: ${sampleQuestions[topic.name] || `Что важно знать о теме «${topic.name}»?`}`;
-          chip.addEventListener('click', () => {
+        const tones = ['tone-teal', 'tone-orange', 'tone-yellow', 'tone-blue'];
+        topics.forEach((topic, index) => {
+          const button = node('button', 'topic-button');
+          const icon = node('span', `topic-icon ${tones[index % tones.length]}`);
+          icon.append(svgIcon(iconForTopic(topic.name)));
+          button.append(icon, node('span', 'topic-label', topic.name));
+          button.type = 'button';
+          button.setAttribute('aria-label', `Тема: ${topic.name}`);
+          button.title = `Пример вопроса: ${sampleQuestions[topic.name] || `Что важно знать о теме «${topic.name}»?`}`;
+          button.addEventListener('click', () => {
             input.value = sampleQuestions[topic.name] || `Что важно знать о теме «${topic.name}»?`;
+            updateCharacterCount();
             input.focus();
           });
-          topicsNode.append(chip);
+          topicsNode.append(button);
         });
         if (!topics.length) topicsNode.append(node('span', 'composer-hint', 'Темы не найдены.'));
       } catch {
@@ -678,18 +1200,32 @@
     }
 
     async function checkHealth() {
-      try {
-        const response = await fetch('/health');
-        if (!response.ok) throw new Error('health');
-        const data = await response.json();
-        const ready = data.status === 'ready';
-        healthNode.textContent = ready ? 'Сервис готов' : 'Сервис недоступен';
-        healthNode.classList.toggle('ready', ready);
-        healthNode.classList.toggle('unavailable', !ready);
-      } catch {
-        healthNode.textContent = 'Сервис недоступен';
-        healthNode.classList.add('unavailable');
+      const maxAttempts = 20;
+      const interval = 4000;
+      for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+        healthNode.textContent = 'Сервис запускается…';
+        healthNode.classList.remove('ready', 'unavailable');
+        healthNode.classList.add('starting');
+        try {
+          const response = await fetch('/health');
+          if (!response.ok) throw new Error('health');
+          const data = await response.json();
+          if (data.status === 'ready') {
+            healthNode.textContent = 'Сервис готов';
+            healthNode.classList.remove('starting', 'unavailable');
+            healthNode.classList.add('ready');
+            return;
+          }
+        } catch {
+          // Keep waiting while the service starts.
+        }
+        if (attempt < maxAttempts - 1) {
+          await new Promise((resolve) => setTimeout(resolve, interval));
+        }
       }
+      healthNode.textContent = 'Сервис недоступен';
+      healthNode.classList.remove('starting', 'ready');
+      healthNode.classList.add('unavailable');
     }
 
     form.addEventListener('submit', async (event) => {
@@ -707,17 +1243,14 @@
       }
 
       sendButton.disabled = true;
-      sendButton.replaceChildren();
-      const spinner = node('span', 'spinner');
-      spinner.setAttribute('aria-hidden', 'true');
-      sendButton.append(spinner, document.createTextNode('Ищу…'));
-      setNotice('Ищу подходящие материалы…');
+      showLoadingPost(question);
+      setNotice('');
 
       try {
         const response = await fetch('/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question, top_k: Number(topK.value) })
+          body: JSON.stringify({ question, top_k: TOP_K })
         });
         if (!response.ok) {
           let detail = '';
@@ -751,11 +1284,12 @@
           id: `${now.getTime()}-${++entrySequence}`,
           question,
           time: now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
-          found: data.found && data.confidence !== 'low',
+          found: data.found,
           confidence: data.confidence,
-          matches: data.found && data.confidence !== 'low' ? data.matches : []
+          matches: data.matches
         });
         input.value = '';
+        updateCharacterCount();
         renderFeed();
         setNotice('');
       } catch (error) {
@@ -767,11 +1301,12 @@
           true
         );
       } finally {
+        removeLoadingPost();
         sendButton.disabled = false;
-        sendButton.textContent = 'Отправить';
       }
     });
 
+    input.addEventListener('input', updateCharacterCount);
     input.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
         event.preventDefault();
@@ -789,6 +1324,7 @@
     loadTopics();
     checkHealth();
     renderFeed();
+    updateCharacterCount();
   </script>
 </body>
 </html>
